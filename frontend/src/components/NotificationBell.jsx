@@ -18,7 +18,8 @@ function NotificationBell() {
     const token = localStorage.getItem('nexora-access-token')
     if (!token) return
 
-    const ws = new WebSocket(`ws://127.0.0.1:8000/notifications/ws?token=${token}`)
+    const wsBaseUrl = import.meta.env.VITE_WS_URL || 'ws://127.0.0.1:8000'
+    const ws = new WebSocket(`${wsBaseUrl}/notifications/ws?token=${token}`)
     wsRef.current = ws
 
     ws.onmessage = (event) => {
