@@ -1,0 +1,36 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+
+      - name: Run tests
+        env:
+          DATABASE_URL: "sqlite:///:memory:"
+          SECRET_KEY: "test-secret-key-for-ci"
+          ALGORITHM: "HS256"
+          ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+          REFRESH_TOKEN_EXPIRE_DAYS: "7"
+          GEMINI_API_KEY: "test-key-not-used-in-ci"
+          REDIS_URL: "redis://localhost:6379/0"
+        run: |
+          pytest backend/tests/ -v

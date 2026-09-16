@@ -1,8 +1,8 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import JSON, DateTime, ForeignKey, Integer, String, Text, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.core.database import Base
@@ -21,6 +21,6 @@ class AIRequest(Base):
     module: Mapped[str] = mapped_column(String(50), nullable=False)
     provider: Mapped[str] = mapped_column(String(50), default="gemini", nullable=False)
     prompt: Mapped[str] = mapped_column(Text, nullable=False)
-    response: Mapped[dict] = mapped_column(JSONB, nullable=True)
+    response: Mapped[dict] = mapped_column(JSON, nullable=True)
     latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
