@@ -27,7 +27,7 @@ def _call_gemini(prompt: str) -> str:
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"response_mime_type": "application/json"},
         },
-        timeout=15,
+        timeout=45,
     )
 
     if response.status_code != 200:
