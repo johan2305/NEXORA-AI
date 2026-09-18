@@ -1113,7 +1113,7 @@ alembic downgrade -1
 
 Testing is an integral part of the NEXORA AI development workflow.
 
-The project currently includes an automated backend test suite executed with **pytest**, with **19 automated tests** integrated into the **GitHub Actions CI pipeline**.
+The project currently includes an automated backend test suite executed with **pytest**, with **20 automated tests** integrated into the **GitHub Actions CI pipeline**, reaching **74% code coverage** reported by **pytest-cov**.
 
 Current testing coverage includes:
 
@@ -1126,6 +1126,8 @@ Current testing coverage includes:
 * 🗄️ Database-related tests
 
 * ⚙️ Business logic and automation tests
+
+* 🔴 Redis connectivity test
 
 * 📊 Test coverage reporting
 
@@ -1148,13 +1150,19 @@ GitHub Actions
 
    │
 
-   ├── Install dependencies
+   ├── Checkout
 
-   ├── Configure test environment
+   ├── Set up Python 3.13 (with pip cache)
+
+   ├── Start Redis 7 service
+
+   ├── Install dependencies (backend/requirements.txt)
+
+   ├── Ruff linting (ruff check backend/)
 
    ├── Run pytest
 
-   ├── Generate coverage
+   ├── Generate coverage (pytest-cov)
 
    └── Validate application
 
@@ -1174,7 +1182,37 @@ GitHub Actions
           Deployment
 ```
 
-The goal is to keep automated testing integrated into the development and deployment workflow instead of relying exclusively on manual verification.
+### 🔐 CI Secrets & Environment
+
+Sensitive values are **never committed to the repository**. The CI pipeline consumes them through **GitHub Actions Secrets**:
+
+* `SECRET_KEY` — application secret used for JWT signing.
+
+* `GEMINI_API_KEY` — API key used for Google Gemini integration.
+
+Locally, the same variables are provided through a `.env` file that is excluded from version control.
+
+### 🔴 Redis in CI
+
+Redis is used both locally and in the CI pipeline:
+
+* **Local development:** Redis 7 running through Docker Compose.
+
+* **GitHub Actions:** Redis 7 configured as a **service container** for the workflow.
+
+* **Test coverage:** a dedicated connection test (`test_redis.py`) verifies that the CI Redis service is reachable.
+
+### 🧹 Linting
+
+The project uses **Ruff 0.16.8** for fast Python linting and static checks.
+
+Configuration lives in `pyproject.toml`, and the CI pipeline runs:
+
+```bash
+ruff check backend/
+```
+
+This keeps the codebase consistent and catches common issues before tests run.
 
 ### 📈 Future Testing Improvements
 
@@ -1189,6 +1227,8 @@ As the platform continues to evolve, additional testing layers can be introduced
 * 🧪 Expanded database integration tests
 
 * 📊 Increased code coverage
+
+* 🎯 Coverage threshold enforcement in CI
 
 * 🔍 Static analysis and linting
 
@@ -1228,19 +1268,29 @@ The current deployment workflow connects the main repository with the production
               ┌──────────┴──────────┐
               │                     │
               ▼                     ▼
-        Install & Test         Coverage
+
+        Ruff + Pytest         Coverage (74%)
+
               │                     │
+
               └──────────┬──────────┘
                          │
+
                     ✅ CI PASS
+
                          │
+
               ┌──────────┴──────────┐
               │                     │
               ▼                     ▼
+
         ☁️ Render              ▲ Vercel
         Backend               Frontend
+
               │                     │
+
               ▼                     ▼
+
         🚀 Production          🚀 Production
 ```
 
@@ -1248,17 +1298,21 @@ The pipeline provides:
 
 * 🔄 Automated testing on repository changes
 
-* 🧪 Automated pytest execution
+* 🧪 Automated pytest execution (20 tests)
 
-* 📊 Test coverage generation
+* 🧹 Ruff linting on the backend
+
+* 📊 Test coverage generation (currently 74%)
+
+* 🔐 Secrets injected through GitHub Actions Secrets
+
+* 🔴 Redis 7 service container for tests
+
+* ⚡ pip dependency caching for faster CI runs
 
 * 🚀 Continuous backend deployment through Render
 
 * ⚡ Continuous frontend deployment through Vercel
-
-* 🔐 Environment-based production configuration
-
-This setup allows the project to move from source-code changes to deployed application updates with significantly less manual intervention.
 
 ---
 
@@ -1751,7 +1805,7 @@ The current project includes:
 
 * 🧪 Automated backend test suite
 
-* 🔄 GitHub Actions CI pipeline
+* 🔄 GitHub Actions CI pipeline (Ruff + pytest + coverage + Redis service + secrets + pip cache)
 
 * ☁️ Cloud production deployment
 
