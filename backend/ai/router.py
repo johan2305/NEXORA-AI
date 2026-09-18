@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from backend.ai import service as ai_service
+from backend.ai.schemas import SmartTaskRequest
 from backend.core.database import get_db
-from backend.core.dependencies import get_current_user, CurrentUser
+from backend.core.dependencies import CurrentUser, get_current_user
 from backend.tasks import service as task_service
 from backend.tasks.schemas import TaskCreate, TaskResponse
-from backend.ai.schemas import SmartTaskRequest
 
 router = APIRouter(prefix="/ai", tags=["ai"])
 

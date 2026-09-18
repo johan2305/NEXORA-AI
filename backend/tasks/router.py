@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from backend.core.database import get_db
-from backend.core.dependencies import get_current_user, CurrentUser
+from backend.core.dependencies import CurrentUser, get_current_user
 from backend.tasks import service as task_service
-from backend.tasks.schemas import TaskCreate, TaskUpdate, TaskResponse
+from backend.tasks.schemas import TaskCreate, TaskResponse, TaskUpdate
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 

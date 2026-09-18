@@ -1,16 +1,6 @@
 from celery import Celery
 
-from backend.ai.models import AIRequest
-from backend.audit.models import ActivityLog
-from backend.auth.models import RefreshToken
-from backend.automations.models import Automation, AutomationExecution
 from backend.core.config import get_settings
-from backend.customers.models import Customer
-from backend.notifications.models import Notification
-from backend.organizations.models import Membership, Organization
-from backend.projects.models import Project
-from backend.tasks.models import Task
-from backend.users.models import User
 
 settings = get_settings()
 

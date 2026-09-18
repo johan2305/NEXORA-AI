@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from backend.core.database import get_db
-from backend.core.dependencies import get_current_user, CurrentUser
+from backend.core.dependencies import CurrentUser, get_current_user
 from backend.projects import service as project_service
-from backend.projects.schemas import ProjectCreate, ProjectUpdate, ProjectResponse
+from backend.projects.schemas import ProjectCreate, ProjectResponse, ProjectUpdate
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 

@@ -4,19 +4,19 @@ from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
 
+from backend.audit import repository as audit_repository
 from backend.auth import repository as auth_repository
-from backend.auth.schemas import RegisterRequest, LoginRequest, TokenResponse
+from backend.auth.schemas import LoginRequest, RegisterRequest, TokenResponse
 from backend.core.security import (
-    hash_password,
-    verify_password,
     create_access_token,
     create_refresh_token,
     decode_token,
+    hash_password,
     hash_token,
+    verify_password,
 )
 from backend.organizations import repository as org_repository
 from backend.users import repository as user_repository
-from backend.audit import repository as audit_repository
 
 
 class AuthError(Exception):

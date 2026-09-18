@@ -1,10 +1,11 @@
-import asyncio
+import json
 import uuid
 
 import redis.asyncio as aioredis
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 
+from backend.core.config import get_settings
 from backend.core.database import get_db
 from backend.core.dependencies import CurrentUser, get_current_user
 from backend.core.security import decode_token
@@ -13,8 +14,6 @@ from backend.notifications.schemas import NotificationResponse
 from backend.notifications.ws_manager import manager
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
-
-from backend.core.config import get_settings
 
 settings = get_settings()
 
@@ -75,10 +74,14 @@ async def redis_listener():
             if message["type"] != "message":
                 continue
 
-            import json
-
             data = json.loads(message["data"])
-            print(f"📬 [redis_listener] Enviando a organización {data['organization_id']}")
-            await manager.send_to_organization(data["organization_id"], data["notification"])
+            print(
+                f"📬 [redis_listener] Enviando a organización "
+                f"{data['organization_id']}"
+            )
+            await manager.send_to_organization(
+                data["organization_id"],
+                data["notification"],
+            )
     except Exception as e:
-        print(f"❌ [redis_listener] ERROR: {e}")
+        print(f"❌ [redis_listener] Error: {e}")

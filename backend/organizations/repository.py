@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy.orm import Session
 
-from backend.organizations.models import Organization, Membership
+from backend.organizations.models import Membership, Organization
 
 
 def create_organization(db: Session, name: str, slug: str) -> Organization:
