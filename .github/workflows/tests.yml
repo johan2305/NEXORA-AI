@@ -39,4 +39,4 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           REDIS_URL: "redis://localhost:6379/0"
         run: |
-          pytest backend/tests/ -v
+          pytest backend/tests/ -v --cov=backend --cov-report=term
